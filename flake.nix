@@ -21,7 +21,12 @@
           mkShell
             {
               buildInputs = with pkgs; [
+                #dotnet-runtime
+                dotnet-sdk
+                git
                 gnumake
+                nuget-to-nix
+                which
               ];
             };
 
