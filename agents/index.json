@@ -1,0 +1,59 @@
+{
+  "@context": {
+    "@vocab": "http://schema.nuget.org/services#",
+    "comment": "http://www.w3.org/2000/01/rdf-schema#comment",
+    "label": "http://www.w3.org/2000/01/rdf-schema#label"
+  },
+  "resources": [
+    {
+      "@id": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/v2/",
+      "@type": "PackagePublish/2.0.0"
+    },
+    {
+      "@id": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/v2/",
+      "@type": "LegacyGallery/2.0.0"
+    },
+    {
+      "@id": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/v3/registrations2/",
+      "@type": "RegistrationsBaseUrl/3.0.0-beta"
+    },
+    {
+      "@id": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/v3/registrations2-semver2/",
+      "@type": "RegistrationsBaseUrl/3.6.0",
+      "comment": "This base URL includes SemVer 2.0.0 packages."
+    },
+    {
+      "@id": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/v3/registrations2-semver2/",
+      "@type": "RegistrationsBaseUrl/Versioned",
+      "comment": "This base URL includes SemVer 2.0.0 packages."
+    },
+    {
+      "@id": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/v3/query2/",
+      "@type": "SearchQueryService/3.0.0-beta"
+    },
+    {
+      "@id": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/v3/flat2/",
+      "@type": "PackageBaseAddress/3.0.0"
+    },
+    {
+      "@id": "https://pkgs.dev.azure.com/mseng/",
+      "@type": "VssBaseUrl"
+    },
+    {
+      "@id": "urn:uuid:61a4ae2c-15fb-4085-b7f6-0044b9eb7b85",
+      "@type": "VssFeedId",
+      "label": "nugetvssprivate"
+    },
+    {
+      "@id": "com.visualstudio.feeds.feedview:61a4ae2c-15fb-4085-b7f6-0044b9eb7b85",
+      "@type": "VssQualifiedFeedViewId",
+      "label": "nugetvssprivate"
+    },
+    {
+      "@id": "urn:uuid:c86767d8-af79-4303-a7e6-21da0ba435e2",
+      "@type": "AzureDevOpsProjectId",
+      "label": "PipelineTools"
+    }
+  ],
+  "version": "3.0.0"
+}
