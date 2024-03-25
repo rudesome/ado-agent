@@ -1,23 +1,5 @@
 {
   "nodes": {
-    "container-image": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "lastModified": 1710687085,
-        "narHash": "sha256-9IDozix7erPL9rL2l53XnfFgX3ctt1x+6T7a0oEVNGs=",
-        "owner": "rudesome",
-        "repo": "minimal-nix-container",
-        "rev": "6659a1d8f69fb798faf10cf54c2b310eea4a13f9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rudesome",
-        "repo": "minimal-nix-container",
-        "type": "github"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -69,27 +51,10 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1710565619,
-        "narHash": "sha256-xu/EnZCNdIj7m/QjCNIG5vrCA4TYg5uwFReb9XDxET0=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "8ac30a39abc5ea67037dfbf090d6e89f187c6e50",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-23.11",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
-        "container-image": "container-image",
         "flake-parts": "flake-parts",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

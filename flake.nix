@@ -1,9 +1,10 @@
 {
   description = "Nix Azure DevOps Agent";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
-    container-image.url = "github:rudesome/minimal-nix-container";
   };
+
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
     let
       agent = import ./agents/agents.nix { };
