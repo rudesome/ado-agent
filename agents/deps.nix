@@ -1,5 +1,9 @@
 { fetchNuGet }: [
+  # added manually
+  (fetchNuGet { pname = "Microsoft.BuildXL.Cache.Hashing"; version = "0.1.0-20230922.1"; sha256 = "03mmkyhdwxcfsjpz7dfpkl2y60lw6g79pxsr4ibsiy5fddp18s5y"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/Microsoft.BuildXL.Cache.Hashing/versions/0.1.0-20230922.1/content"; })
+  (fetchNuGet { pname = "Microsoft.Windows.Debuggers.SymstoreInterop"; version = "1.0.1-netstandard2.0"; sha256 = "1paqlp2552vjkws85gksn68qihciy7hg60l3v060c7v8an12vy2n"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/Microsoft.Windows.Debuggers.SymstoreInterop/versions/1.0.1-netstandard2.0/content"; })
   (fetchNuGet { pname = "System.Private.Uri"; version = "4.3.0"; sha256 = "04r1lkdnsznin0fj4ya1zikxiqr0h6r6a1ww2dsm60gqhdrf0mvx"; })
+  (fetchNuGet { pname = "azuredevops-testresultparser"; version = "1.0.2"; sha256 = "0ndcj1vrdl2mdrbyxb7xb51pgnplzvjaxmiy04xa0gd7x2aj4gk7"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/azuredevops-testresultparser/versions/1.0.2/content"; })
   (fetchNuGet { pname = "runtime.any.System.Collections"; version = "4.3.0"; sha256 = "0bv5qgm6vr47ynxqbnkc7i797fdi8gbjjxii173syrx14nmrkwg0"; })
   (fetchNuGet { pname = "runtime.any.System.Diagnostics.Tools"; version = "4.3.0"; sha256 = "1wl76vk12zhdh66vmagni66h5xbhgqq7zkdpgw21jhxhvlbcl8pk"; })
   (fetchNuGet { pname = "runtime.any.System.Diagnostics.Tracing"; version = "4.3.0"; sha256 = "00j6nv2xgmd3bi347k00m7wr542wjlig53rmj28pmw7ddcn97jbn"; })
@@ -21,11 +25,11 @@
   (fetchNuGet { pname = "runtime.unix.System.IO.FileSystem"; version = "4.3.0"; sha256 = "14nbkhvs7sji5r1saj2x8daz82rnf9kx28d3v2qss34qbr32dzix"; })
   (fetchNuGet { pname = "runtime.unix.System.Private.Uri"; version = "4.3.0"; sha256 = "1jx02q6kiwlvfksq1q9qr17fj78y5v6mwsszav4qcz9z25d5g6vk"; })
   (fetchNuGet { pname = "runtime.unix.System.Runtime.Extensions"; version = "4.3.0"; sha256 = "0pnxxmm8whx38dp6yvwgmh22smknxmqs5n513fc7m4wxvs1bvi4p"; })
-  #
+  (fetchNuGet { pname = "vss-api-netcore"; version = "0.5.238-private"; sha256 = "0b42bnzc9h75asxhsbih4zkyn18ki1z8r075vmrd9706lgklqxq9"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/vss-api-netcore/versions/0.5.238-private/content"; })
+  # nuget-to-nix
   (fetchNuGet { pname = "Azure.Core"; version = "1.35.0"; sha256 = "066idkc6kmp3532r3bqc698ybshw59306vg7g51fy90921jqv8lh"; })
   (fetchNuGet { pname = "Azure.Core"; version = "1.36.0"; sha256 = "14lsc6zik7s5by3gp86pf77wh58fcqrjy2xhx5p03gmhdn6iz2cn"; })
   (fetchNuGet { pname = "Azure.Identity"; version = "1.10.2"; sha256 = "1ls9ypggmryh13gdgxn1mwafqzfjl12r32qvr5bwyj865jf2ahw2"; })
-  (fetchNuGet { pname = "azuredevops-testresultparser"; version = "1.0.2"; sha256 = "0ndcj1vrdl2mdrbyxb7xb51pgnplzvjaxmiy04xa0gd7x2aj4gk7"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/azuredevops-testresultparser/versions/1.0.2/content"; })
   (fetchNuGet { pname = "Castle.Core"; version = "5.1.1"; sha256 = "1caf4878nvjid3cw3rw18p9cn53brfs5x8dkvf82xvcdwc3i0nd1"; })
   (fetchNuGet { pname = "CommandLineParser"; version = "2.7.82"; sha256 = "0qmy71a8pdgm049zi26k6bb3rn477ki63vi4cyvhwjaxyf3c0zkv"; })
   (fetchNuGet { pname = "DotNet.Glob"; version = "2.0.3"; sha256 = "1bsksvhyvxhk15bg2cvjf1nyw2xp5xgmvfd3jj17hdy6j7pwchzp"; })
@@ -39,7 +43,6 @@
   (fetchNuGet { pname = "Microsoft.Bcl.AsyncInterfaces"; version = "1.1.1"; sha256 = "0a1ahssqds2ympr7s4xcxv5y8jgxs7ahd6ah6fbgglj4rki1f1vw"; })
   (fetchNuGet { pname = "Microsoft.Bcl.AsyncInterfaces"; version = "5.0.0"; sha256 = "0cp5jbax2mf6xr3dqiljzlwi05fv6n9a35z337s92jcljiq674kf"; })
   (fetchNuGet { pname = "Microsoft.Bcl.AsyncInterfaces"; version = "6.0.0"; sha256 = "15gqy2m14fdlvy1g59207h5kisznm355kbw010gy19vh47z8gpz3"; })
-  (fetchNuGet { pname = "Microsoft.BuildXL.Cache.Hashing"; version = "0.1.0-20230922.1"; sha256 = "03mmkyhdwxcfsjpz7dfpkl2y60lw6g79pxsr4ibsiy5fddp18s5y"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/Microsoft.BuildXL.Cache.Hashing/versions/0.1.0-20230922.1/content"; })
   (fetchNuGet { pname = "Microsoft.CodeCoverage"; version = "16.4.0"; sha256 = "11dlvcl3p7v9sjnqsfhii7gj4f0mvqv7h5znqxlxgc9cbg7g9vhf"; })
   (fetchNuGet { pname = "Microsoft.CSharp"; version = "4.0.1"; sha256 = "0zxc0apx1gcx361jlq8smc9pfdgmyjh6hpka8dypc9w23nlsh6yj"; })
   (fetchNuGet { pname = "Microsoft.CSharp"; version = "4.5.0"; sha256 = "01i28nvzccxbqmiz217fxs6hnjwmd5fafs37rd49a6qp53y6623l"; })
@@ -87,7 +90,6 @@
   (fetchNuGet { pname = "Microsoft.Win32.Registry"; version = "5.0.0"; sha256 = "102hvhq2gmlcbq8y2cb7hdr2dnmjzfp2k3asr1ycwrfacwyaak7n"; })
   (fetchNuGet { pname = "Microsoft.Win32.SystemEvents"; version = "5.0.0"; sha256 = "0sja4ba0mrvdamn0r9mhq38b9dxi08yb3c1hzh29n1z6ws1hlrcq"; })
   (fetchNuGet { pname = "Microsoft.Win32.SystemEvents"; version = "6.0.0"; sha256 = "0c6pcj088g1yd1vs529q3ybgsd2vjlk5y1ic6dkmbhvrp5jibl9p"; })
-  (fetchNuGet { pname = "Microsoft.Windows.Debuggers.SymstoreInterop"; version = "1.0.1-netstandard2.0"; sha256 = "1paqlp2552vjkws85gksn68qihciy7hg60l3v060c7v8an12vy2n"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/Microsoft.Windows.Debuggers.SymstoreInterop/versions/1.0.1-netstandard2.0/content"; })
   (fetchNuGet { pname = "Minimatch"; version = "2.0.0"; sha256 = "1k84q1bz1qq2nh35nip8vmi65wixsh5y7piln5b4n172xzhfqvx0"; })
   (fetchNuGet { pname = "Mono.Posix.NETStandard"; version = "1.0.0-beta2"; sha256 = "1vj5fifxh3xsgn1kcyqba5i89m8a6zdpvl0v1dvgmdg87z1wl46c"; })
   (fetchNuGet { pname = "Mono.Unix"; version = "7.1.0-final.1.21458.1"; sha256 = "0yv065hyikg2n3m61dlg8qf1z609y2f37ya2zsg50f5qx64ffvdn"; })
@@ -356,7 +358,6 @@
   (fetchNuGet { pname = "System.Xml.XmlSerializer"; version = "4.3.0"; sha256 = "07pa4sx196vxkgl3csvdmw94nydlsm9ir38xxcs84qjn8cycd912"; })
   (fetchNuGet { pname = "System.Xml.XPath"; version = "4.3.0"; sha256 = "1cv2m0p70774a0sd1zxc8fm8jk3i5zk2bla3riqvi8gsm0r4kpci"; })
   (fetchNuGet { pname = "System.Xml.XPath.XmlDocument"; version = "4.3.0"; sha256 = "1h9lh7qkp0lff33z847sdfjj8yaz98ylbnkbxlnsbflhj9xyfqrm"; })
-  (fetchNuGet { pname = "vss-api-netcore"; version = "0.5.238-private"; sha256 = "0b42bnzc9h75asxhsbih4zkyn18ki1z8r075vmrd9706lgklqxq9"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/vss-api-netcore/versions/0.5.238-private/content"; })
   (fetchNuGet { pname = "xunit"; version = "2.2.0"; sha256 = "0s6z0bg7pqi52w88i4psiyc2qal0gqq5yd2db1n830ivsqsjh0wg"; })
   (fetchNuGet { pname = "xunit.abstractions"; version = "2.0.1"; sha256 = "0c7zkf3i8n1mhc457q859klk067bw1xbf31lyxlwc5hlx9aqz65z"; })
   (fetchNuGet { pname = "xunit.assert"; version = "2.2.0"; sha256 = "07lzxa2k3y1zcv119970l5rswpyiyby6ayvmp99p0pdwvdhqkjl4"; })
