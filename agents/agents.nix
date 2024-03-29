@@ -29,13 +29,23 @@
       nugetDeps = ./deps.nix;
 
       postConfigure = ''
-        echo "postConfigre:"
+        echo "....postConfigre:"
+        echo "....this is failing"
         dotnet msbuild \
-          -t:GenerateConstant \
-          -p:ContinuousIntegrationBuild=true \
-          -p:Deterministic=true \
-          -p:RunnerVersion="${version}" \
-          src/dir.proj
+          -t:Build \
+          -p:PackageRuntime=linux-x64 \
+          -p:PackageType=pipelines-agent \
+          -p:BUILDCONFIG=Release \
+          -p:AgentVersion=3.999.999 \
+          -p:LayoutRoot=$out/_layout/x64-linux \
+          -p:CodeAnalysis=true
+      '';
+
+      doCheck = true;
+
+      preCheck = ''
+        echo "....Ello from precheck"
+        mkdir -p _layout/x64-linux
       '';
 
       nativeBuildInputs = [
