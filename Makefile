@@ -4,6 +4,9 @@ agent: ## build azure devops agent
 	@echo "build docker nix in docker with nix"
 	nix build .#agent --json --no-link --print-build-logs | jq -r \".[0].outputs.out\"
 
+remote: ## build azure devops agent remotely
+	@echo "build docker nix in docker with nix"
+	nix build .#agent --json --no-link --print-build-logs --eval-store auto --store ssh-ng://rudesome@51.104.2.216 --system 'x86_64-linux'
 develop: ## nix develop shell
 	nix develop
 
