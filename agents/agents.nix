@@ -17,6 +17,9 @@
         '';
       };
 
+      #buildType = "Build";
+      selfContainedBuild = false;
+
       projectFile = [
         "src/Microsoft.VisualStudio.Services.Agent/Microsoft.VisualStudio.Services.Agent.csproj"
         "src/Agent.Listener/Agent.Listener.csproj"
@@ -36,30 +39,26 @@
       postConfigure = ''
         echo "....postConfigre:"
         echo "....this is failing"
-        echo "${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
-
-        ls -lsa
         dotnet msbuild \
           -p:AgentVersion=3.999.999 \
           -p:BUILDCONFIG=Release \
-          -p:Configuration=Release
+          -p:Configuration=Release \
           -p:ContinuousIntegrationBuild=true \
           -p:Deterministic=true \
           -p:LayoutRoot=$out/_layout/x64-linux \
-          -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
-          -p:RuntimeIdentifier="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
           -p:PackageType=pipelines-agent \
+          -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
           -t:Build
+      '';
+
+      buildPhase = ''
+        echo ".....Hello from buildPhase"
       '';
 
       dotnet-sdk = dotnetCorePackages.sdk_6_0;
       dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
-      doCheck = true;
-      preCheck = ''
-        echo "....Ello from precheck"
-        mkdir -p _layout/x64-linux
-      '';
+      doCheck = false;
 
       nativeBuildInputs = [
         which
