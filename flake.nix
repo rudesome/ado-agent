@@ -15,9 +15,9 @@
         "x86_64-linux"
       ];
 
-     flake = {
-       pkgs = import ((builtins.getEnv "HOME") + "/github/nixpkgs") { };
-      };
+     #flake = {
+       #pkgs = import ((builtins.getEnv "HOME") + "/github/nixpkgs") { };
+      #};
 
       perSystem = { pkgs, system, self', inputs', ... }: {
 
