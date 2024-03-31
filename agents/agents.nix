@@ -1,6 +1,6 @@
 {}:
 {
-  agent = { lib, buildDotnetModule, fetchFromGitHub, which, git }:
+  agent = { lib, buildDotnetModule, fetchFromGitHub, which, git, stdenv, dotnetCorePackages }:
     buildDotnetModule rec {
       pname = "ado-agent";
       version = "3.236.1";
@@ -28,21 +28,34 @@
 
       nugetDeps = ./deps.nix;
 
+      preConfigure = ''
+        echo "....preConfigure"
+        mkdir -p _layout/x64_linux
+      '';
+
       postConfigure = ''
         echo "....postConfigre:"
         echo "....this is failing"
+        echo "${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+
+        ls -lsa
         dotnet msbuild \
-          -t:Build \
-          -p:PackageRuntime=linux-x64 \
-          -p:PackageType=pipelines-agent \
-          -p:BUILDCONFIG=Release \
           -p:AgentVersion=3.999.999 \
+          -p:BUILDCONFIG=Release \
+          -p:Configuration=Release
+          -p:ContinuousIntegrationBuild=true \
+          -p:Deterministic=true \
           -p:LayoutRoot=$out/_layout/x64-linux \
-          -p:CodeAnalysis=true
+          -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
+          -p:RuntimeIdentifier="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
+          -p:PackageType=pipelines-agent \
+          -t:Build
       '';
 
-      doCheck = true;
+      dotnet-sdk = dotnetCorePackages.sdk_6_0;
+      dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
+      doCheck = true;
       preCheck = ''
         echo "....Ello from precheck"
         mkdir -p _layout/x64-linux

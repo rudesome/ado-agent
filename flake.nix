@@ -15,7 +15,12 @@
         "x86_64-linux"
       ];
 
-      perSystem = { pkgs, system, ... }: {
+     flake = {
+       pkgs = import ((builtins.getEnv "HOME") + "/github/nixpkgs") { };
+      };
+
+      perSystem = { pkgs, system, self', inputs', ... }: {
+
         devShells.default =
           with pkgs;
           mkShell
@@ -32,7 +37,7 @@
 
         packages = {
           agent = agent.agent {
-            inherit (pkgs) lib buildDotnetModule fetchFromGitHub which git;
+            inherit (pkgs) lib buildDotnetModule dotnetCorePackages stdenv fetchFromGitHub which git;
           };
         };
       };
