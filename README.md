@@ -1,12 +1,14 @@
 # ado-agent
-Azure DevOps Agent packaged with Nix
+Microsoft Azure Pipeline Agent packaged with Nix
 
 ## Usage
 
 ```bash
 
+# 1
 nix develop
 
+# 2
 make
 
 ```
