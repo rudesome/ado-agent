@@ -1,6 +1,15 @@
 {}:
 {
-  agent = { lib, buildDotnetModule, fetchFromGitHub, which, git, stdenv, dotnetCorePackages }:
+  agent =
+    { lib
+    , buildDotnetModule
+    , fetchFromGitHub
+    , which
+    , git
+    , stdenv
+    , dotnetCorePackages
+    , nodejs_20
+    }:
     buildDotnetModule rec {
       pname = "ado-agent";
       version = "3.236.1";
@@ -41,25 +50,43 @@
         echo "....this is failing"
         dotnet msbuild \
           -p:AgentVersion=3.999.999 \
-          -p:BUILDCONFIG=Release \
+          -p:BUILDCONFIG=Debug \
           -p:Configuration=Release \
           -p:ContinuousIntegrationBuild=true \
           -p:Deterministic=true \
           -p:LayoutRoot=$out/_layout/x64-linux \
           -p:PackageType=pipelines-agent \
+          -t:Build \
           -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
-          -t:Build
+          src/dir.proj
       '';
 
       buildPhase = ''
         echo ".....Hello from buildPhase"
       '';
 
+      patches = [ ./patches/dont-install-service.patch ];
       dotnet-sdk = dotnetCorePackages.sdk_6_0;
       dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
       doCheck = false;
 
+      buildInputs = [
+        stdenv.cc.cc.lib
+      ];
+
+      executables = [
+        "Agent.Listener"
+        "Agent.Worker"
+        "Agent.PluginHost"
+        # dependencies in a nix way
+        #"installdependencies.sh"
+      ];
+
+      preCheck = ''
+        mkdir -p _layout/externals
+        ln -s ${nodejs_20} _layout/externals/node20
+      '';
       nativeBuildInputs = [
         which
         git

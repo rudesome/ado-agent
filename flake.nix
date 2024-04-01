@@ -26,7 +26,6 @@
           mkShell
             {
               buildInputs = with pkgs; [
-                #dotnet-runtime
                 dotnet-sdk
                 git
                 gnumake
@@ -37,7 +36,7 @@
 
         packages = {
           agent = agent.agent {
-            inherit (pkgs) lib buildDotnetModule dotnetCorePackages stdenv fetchFromGitHub which git;
+            inherit (pkgs) lib buildDotnetModule dotnetCorePackages stdenv fetchFromGitHub which git nodejs_20;
           };
         };
       };
