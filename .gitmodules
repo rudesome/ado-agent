@@ -1,0 +1,3 @@
+[submodule "azure-pipelines-agent"]
+	path = azure-pipelines-agent
+	url = git@github.com:microsoft/azure-pipelines-agent.git
