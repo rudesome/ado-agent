@@ -15,8 +15,8 @@
         "x86_64-linux"
       ];
 
-     #flake = {
-       #pkgs = import ((builtins.getEnv "HOME") + "/github/nixpkgs") { };
+      #flake = {
+      #pkgs = import ((builtins.getEnv "HOME") + "/github/nixpkgs") { };
       #};
 
       perSystem = { pkgs, system, self', inputs', ... }: {
@@ -36,7 +36,17 @@
 
         packages = {
           agent = agent.agent {
-            inherit (pkgs) lib buildDotnetModule dotnetCorePackages stdenv fetchFromGitHub which git nodejs_20;
+            inherit (pkgs)
+              lib
+              buildDotnetModule
+              dotnetCorePackages
+              stdenv
+              fetchFromGitHub
+              which
+              git
+              nodejs_20
+              autoPatchelfHook
+              glibcLocales;
           };
         };
       };
