@@ -52,7 +52,8 @@
         rm -fr src/Test/NuGet.Config
         rm -fr src/Agent.Worker/NuGet.Config
         rm -fr src/Agent.Listener/NuGet.Config
-        rm -fr src/Microsoft.VisualStudio.Services.Agent//NuGet.Config
+        rm -fr src/Microsoft.VisualStudio.Services.Agent/NuGet.Config
+        rm -fr tools/CredScanRegexes/nuget.config
       '';
 
       DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
