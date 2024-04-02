@@ -11,6 +11,8 @@
     , nodejs_20
     , stdenv
     , which
+    , buildPackages
+    , runtimeShell
     }:
     buildDotnetModule rec {
       pname = "ado-agent";
@@ -28,8 +30,34 @@
         '';
       };
 
+      unpackPhase = ''
+        cp -r $src $TMPDIR/src
+        chmod -R +w $TMPDIR/src
+        cd $TMPDIR/src
+        (
+          export PATH=${buildPackages.git}/bin:$PATH
+          git init
+          git config user.email "root@localhost"
+          git config user.name "root"
+          git add .
+          git commit -m "Initial commit"
+          git checkout -b v${version}
+        )
+        mkdir -p $TMPDIR/bin
+        cat > $TMPDIR/bin/git <<EOF
+        #!${runtimeShell}
+        if [ \$# -eq 1 ] && [ "\$1" = "rev-parse" ]; then
+          echo $(cat $TMPDIR/src/.git-revision)
+          exit 0
+        fi
+        exec ${buildPackages.git}/bin/git "\$@"
+        EOF
+        chmod +x $TMPDIR/bin/git
+        export PATH=$TMPDIR/bin:$PATH
+      '';
+
       #buildType = "Build";
-      selfContainedBuild = false;
+      #selfContainedBuild = false;
 
       projectFile = [
         "src/Microsoft.VisualStudio.Services.Agent/Microsoft.VisualStudio.Services.Agent.csproj"
@@ -39,51 +67,37 @@
         "src/Agent.Sdk/Agent.Sdk.csproj"
         "src/Agent.Plugins/Agent.Plugins.csproj"
       ];
-
       nugetDeps = ./deps.nix;
+
+      doCheck = true;
 
       preConfigure = ''
         echo "....preConfigure"
         mkdir -p _layout/x64_linux
       '';
 
-      prePatchPhase = ''
-        ls -lsa
-        rm -fr src/Test/NuGet.Config
-        rm -fr src/Agent.Worker/NuGet.Config
-        rm -fr src/Agent.Listener/NuGet.Config
-        rm -fr src/Microsoft.VisualStudio.Services.Agent/NuGet.Config
-        rm -fr tools/CredScanRegexes/nuget.config
-      '';
-
       DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
       LOCALE_ARCHIVE = lib.optionalString (!DOTNET_SYSTEM_GLOBALIZATION_INVARIANT) "${glibcLocales}/lib/locale/locale-archive";
 
       postConfigure = ''
-        echo "....postConfigre:"
-        echo "....this is failing"
+        # Generate src/Microsoft.VisualStudio.Services.Agent/BuildConstants.cs
         dotnet msbuild \
-          -p:AgentVersion=3.999.999 \
+          -t:GenerateConstant \
           -p:BUILDCONFIG=Debug \
           -p:Configuration=Release \
           -p:ContinuousIntegrationBuild=true \
           -p:Deterministic=true \
-          -p:LayoutRoot=$out/_layout/x64-linux \
-          -p:PackageType=pipelines-agent \
-          -t:Build \
+          -p:AgentVersion="${version}" \
           -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
           src/dir.proj
       '';
 
-      buildPhase = ''
-        echo ".....Hello from buildPhase"
-      '';
-
-      #patches = [ ./patches/dont-install-service.patch ];
+      patches = [ ./patches/dont-install-service.patch ];
       dotnet-sdk = dotnetCorePackages.sdk_6_0;
       dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
-      doCheck = false;
+      dotnetFlags = [ "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" ];
+
 
       buildInputs = [
         stdenv.cc.cc.lib
@@ -101,6 +115,7 @@
         mkdir -p _layout/externals
         ln -s ${nodejs_20} _layout/externals/node20
       '';
+
       nativeBuildInputs = [
         autoPatchelfHook
         which

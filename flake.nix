@@ -46,7 +46,9 @@
               git
               nodejs_20
               autoPatchelfHook
-              glibcLocales;
+              glibcLocales
+              buildPackages
+              runtimeShell;
           };
         };
       };
