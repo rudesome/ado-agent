@@ -86,7 +86,7 @@
           "src/Agent.Listener/Agent.Listener.csproj"
           "src/Agent.Worker/Agent.Worker.csproj"
           "src/Agent.PluginHost/Agent.PluginHost.csproj"
-          #"src/Agent.Sdk/Agent.Sdk.csproj"
+          "src/Agent.Sdk/Agent.Sdk.csproj"
           "src/Agent.Plugins/Agent.Plugins.csproj"
         ];
         nugetDeps = ./deps.nix;
