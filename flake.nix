@@ -36,19 +36,19 @@
 
         packages = {
           agent = agent.agent {
-            inherit (pkgs)
-              lib
-              buildDotnetModule
-              dotnetCorePackages
-              stdenv
-              fetchFromGitHub
-              which
-              git
-              nodejs_20
-              autoPatchelfHook
-              glibcLocales
-              buildPackages
-              runtimeShell;
+            inherit pkgs;
+              #lib
+              #buildDotnetModule
+              #dotnetCorePackages
+              #stdenv
+              #fetchFromGitHub
+              #which
+              #git
+              #nodejs_20
+              #autoPatchelfHook
+              #glibcLocales
+              #buildPackages
+              #runtimeShell;
           };
         };
       };
