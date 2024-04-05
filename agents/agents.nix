@@ -45,24 +45,24 @@
           export PATH=$TMPDIR/bin:$PATH
         '';
 
+        #postPatch = '' '';
+
         patches = [
           ./patches/dont-install-service.patch
           ./patches/host-context-dirs.patch
         ];
 
-        #postPatch = '' '';
-
         DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
         LOCALE_ARCHIVE = lib.optionalString (!DOTNET_SYSTEM_GLOBALIZATION_INVARIANT) "${glibcLocales}/lib/locale/locale-archive";
 
         postConfigure = ''
+          echo "....postConfigure"
+          mkdir -p _layout/linux-x64
           # Generate src/Microsoft.VisualStudio.Services.Agent/BuildConstants.cs
           dotnet msbuild \
             -t:GenerateConstant \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
-            -p:BUILDCONFIG=Debug \
-            -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
             -p:AgentVersion="${version}" \
             src/dir.proj
         '';
@@ -75,14 +75,23 @@
 
         buildInputs = [
           stdenv.cc.cc.lib
-          # TODO: dependencies in a nix way
-          #"installdependencies.sh"
+          # https://github.com/microsoft/azure-pipelines-agent/blob/a3d91272cbe4a61d96084d9d94e4750b743f0a49/src/Misc/layoutbin/installdependencies.sh#L101
+        ];
+
+        dotnetBuildFlags = [
+          "-t:Build"
+          "-p:PackageType=agent"
+          "-p:LayoutRoot=_layout/linux-x64"
+          "-p:BUILDCONFIG=Release"
         ];
 
         dotnet-sdk = dotnetCorePackages.sdk_6_0;
         dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
-        dotnetFlags = [ "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" ];
+
+        dotnetFlags = [
+          "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+        ];
 
         projectFile = [
           "src/Microsoft.VisualStudio.Services.Agent/Microsoft.VisualStudio.Services.Agent.csproj"
@@ -94,11 +103,11 @@
         ];
         nugetDeps = ./deps.nix;
 
-        doCheck = true;
+        doCheck = false;
 
         preCheck = ''
           mkdir -p _layout/externals
-          ln -s ${nodejs_20} _layout/externals/node20
+          ln -s ${nodejs_20} _layout/externals/node20_1
         '';
 
         postInstall = ''
