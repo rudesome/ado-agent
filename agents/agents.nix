@@ -45,7 +45,10 @@
           export PATH=$TMPDIR/bin:$PATH
         '';
 
-        #patches = [ ./patches/dont-install-service.patch ];
+        patches = [
+          ./patches/dont-install-service.patch
+          ./patches/host-context-dirs.patch
+        ];
 
         #postPatch = '' '';
 

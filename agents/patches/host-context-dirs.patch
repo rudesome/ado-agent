@@ -1,0 +1,23 @@
+diff --git a/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs b/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
+index 2cb0cacd..82a2b556 100644
+--- a/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
++++ b/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
+@@ -186,7 +186,7 @@ namespace Microsoft.VisualStudio.Services.Agent
+ 
+                 case WellKnownDirectory.Externals:
+                     path = Path.Combine(
+-                        GetDirectory(WellKnownDirectory.Root),
++                        new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName,
+                         Constants.Path.ExternalsDirectory);
+                     break;
+ 
+@@ -197,7 +197,8 @@ namespace Microsoft.VisualStudio.Services.Agent
+                     break;
+ 
+                 case WellKnownDirectory.Root:
+-                    path = new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
++                    path = Environment.GetEnvironmentVariable("RUNNER_ROOT")
++                            ?? new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
+                     break;
+ 
+                 case WellKnownDirectory.ServerOM:
