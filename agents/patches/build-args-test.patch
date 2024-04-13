@@ -1,0 +1,47 @@
+diff --git a/src/Common.props b/src/Common.props
+index e4159ce0..bd643d65 100644
+--- a/src/Common.props
++++ b/src/Common.props
+@@ -22,42 +22,13 @@
+     <DebugConstant>DEBUG</DebugConstant>
+   </PropertyGroup>
+ 
+-  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
+-    <OSPlatform>OS_WINDOWS</OSPlatform>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
+-    <OSPlatform>OS_OSX</OSPlatform>
+-  </PropertyGroup>
+   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
+     <OSPlatform>OS_LINUX</OSPlatform>
+   </PropertyGroup>
+ 
+-  <PropertyGroup Condition="'$(OSPlatform)' == 'OS_WINDOWS' AND '$(PROCESSOR_ARCHITECTURE)' == 'AMD64'">
+-    <OSArchitecture>X64</OSArchitecture>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$(OSPlatform)' == 'OS_WINDOWS' AND '$(PROCESSOR_ARCHITECTURE)' == 'X86'">
+-    <OSArchitecture>X86</OSArchitecture>
+-  </PropertyGroup>
+-
+-  <PropertyGroup Condition="'$(OSPlatform)' == 'OS_OSX' AND '$(PackageRuntime)' == 'osx-x64'">
+-    <OSArchitecture>X64</OSArchitecture>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$(OSPlatform)' == 'OS_OSX' AND '$(PackageRuntime)' == 'osx-arm64'">
+-    <OSArchitecture>ARM64</OSArchitecture>
+-  </PropertyGroup>
+-
+   <PropertyGroup Condition="'$(OSPlatform)' == 'OS_LINUX' AND '$(PackageRuntime)' == 'linux-x64'">
+     <OSArchitecture>X64</OSArchitecture>
+   </PropertyGroup>
+-  <PropertyGroup Condition="'$(OSPlatform)' == 'OS_LINUX' AND '$(PackageRuntime)' == 'linux-musl-x64'">
+-    <OSArchitecture>X64</OSArchitecture>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$(OSPlatform)' == 'OS_LINUX' AND '$(PackageRuntime)' == 'linux-arm'">
+-    <OSArchitecture>ARM</OSArchitecture>
+-  </PropertyGroup>
+-  <PropertyGroup Condition="'$(OSPlatform)' == 'OS_LINUX' AND '$(PackageRuntime)' == 'linux-arm64'">
+-    <OSArchitecture>ARM64</OSArchitecture>
+-  </PropertyGroup>
+ 
+   <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' == 'true'">
+     <RuntimeIdentifier Condition="'$(OSPlatform)' == 'OS_WINDOWS' And '$(OSArchitecture)' == 'X64'">win-x64</RuntimeIdentifier>

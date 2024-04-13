@@ -1,8 +1,11 @@
-{}:
+{ nodeRuntimes ? [ "node20" ] }:
 {
   agent =
     { pkgs }:
       with pkgs;
+
+      assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
+
       buildDotnetModule rec {
         pname = "ado-agent";
         version = "3.236.1";
@@ -19,6 +22,7 @@
           '';
         };
 
+        # dont change the unpackPhase (yet)
         unpackPhase = ''
           cp -r $src $TMPDIR/src
           chmod -R +w $TMPDIR/src
@@ -36,8 +40,8 @@
           cat > $TMPDIR/bin/git <<EOF
           #!${runtimeShell}
           if [ \$# -eq 1 ] && [ "\$1" = "rev-parse" ]; then
-            echo $(cat $TMPDIR/src/.git-revision)
-            exit 0
+          echo $(cat $TMPDIR/src/.git-revision)
+          exit 0
           fi
           exec ${buildPackages.git}/bin/git "\$@"
           EOF
@@ -45,80 +49,119 @@
           export PATH=$TMPDIR/bin:$PATH
         '';
 
-        #postPatch = '' '';
-
         patches = [
           ./patches/dont-install-service.patch
           ./patches/host-context-dirs.patch
         ];
 
+        postPatch = ''
+            # not using System.Management?
+            #substituteInPlace src/Agent.Sdk/Util/ProcessUtil.cs \
+            #--replace 'using System.Management;' \
+            #' '
+        '';
+
         DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
         LOCALE_ARCHIVE = lib.optionalString (!DOTNET_SYSTEM_GLOBALIZATION_INVARIANT) "${glibcLocales}/lib/locale/locale-archive";
 
-        postConfigure = ''
-          echo "....postConfigure"
+        preConfigure = ''
+          echo "preconfig"
           mkdir -p _layout/linux-x64
           # Generate src/Microsoft.VisualStudio.Services.Agent/BuildConstants.cs
           dotnet msbuild \
             -t:GenerateConstant \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
+            -p:PackageRuntime="${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}" \
             -p:AgentVersion="${version}" \
             src/dir.proj
         '';
+
+        #preBuild = ''
+        #echo "......PREBUILD"
+        #cat << 'EOF' > /build/src/src/Agent.Sdk/Agent.Sdk.csproj
+        #<Project Sdk="Microsoft.NET.Sdk">
+        #<Import Project="..\Common.props" />
+
+        #<PropertyGroup>
+        #<OutputType>Library</OutputType>
+        #<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+        #</PropertyGroup>
+
+        #<ItemGroup>
+        #<PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
+        #<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" Condition="$(CodeAnalysis)=='true'" />
+        #<PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+        #<PackageReference Include="System.IO.FileSystem.AccessControl" Version="6.0.0-preview.5.21301.5" />
+        #<PackageReference Include="System.Management" Version="4.7.0" />
+        #<PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.1" />
+        #<PackageReference Include="System.Security.Principal.Windows" Version="6.0.0-preview.5.21301.5" />
+        #<PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
+        #<PackageReference Include="vss-api-netcore" Version="$(VssApiVersion)" />
+        #</ItemGroup>
+        #</Project>
+        #EOF
+        ##cat /build/src/src/Agent.Sdk/Agent.Sdk.csproj
+        #'';
 
         nativeBuildInputs = [
           autoPatchelfHook
           which
           git
+          dotnetPackages.Nuget
+          makeWrapper
+          wrapGAppsHook
+          gobject-introspection
         ];
+
 
         buildInputs = [
           stdenv.cc.cc.lib
           # https://github.com/microsoft/azure-pipelines-agent/blob/a3d91272cbe4a61d96084d9d94e4750b743f0a49/src/Misc/layoutbin/installdependencies.sh#L101
         ];
 
-        dotnetBuildFlags = [
-          "-t:Build"
-          "-p:PackageType=agent"
-          "-p:LayoutRoot=_layout/linux-x64"
-          "-p:BUILDCONFIG=Release"
-        ];
-
         dotnet-sdk = dotnetCorePackages.sdk_6_0;
         dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
-
-        dotnetFlags = [
-          "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+        dotnetBuildFlags = [
+          "-p:PackageType=agent"
+          "-p:LayoutRoot=_layout/linux-x64"
+          "-p:BUILDCONFIG=Release"
+          "-p:PackageRuntime=linux-x64"
+          "-p:AgentVersion=${version}"
+          "-p:LayoutRoot=_layout/linux-x64"
         ];
 
+        #dotnetFlags = [
+        #"-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+        #];
+
         projectFile = [
-          "src/Microsoft.VisualStudio.Services.Agent/Microsoft.VisualStudio.Services.Agent.csproj"
+          "src/Agent.Sdk/Agent.Sdk.csproj"
           "src/Agent.Listener/Agent.Listener.csproj"
+          "src/Microsoft.VisualStudio.Services.Agent/Microsoft.VisualStudio.Services.Agent.csproj"
           "src/Agent.Worker/Agent.Worker.csproj"
           "src/Agent.PluginHost/Agent.PluginHost.csproj"
-          "src/Agent.Sdk/Agent.Sdk.csproj"
           "src/Agent.Plugins/Agent.Plugins.csproj"
         ];
         nugetDeps = ./deps.nix;
 
-        doCheck = false;
+        doCheck = true;
 
         preCheck = ''
           mkdir -p _layout/externals
-          ln -s ${nodejs_20} _layout/externals/node20_1
+          ln -s ${nodejs_20} _layout/externals/node20
         '';
 
         postInstall = ''
           echo ".....postInstall"
         '';
 
-        executables = [
-          "Agent.Listener"
-          "Agent.Worker"
-          "Agent.PluginHost"
-        ];
+        #executables = [
+        #"Agent.Listener"
+        #"Agent.Worker"
+        #"Agent.PluginHost"
+        #];
 
       };
 

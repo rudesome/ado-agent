@@ -26,6 +26,22 @@
   (fetchNuGet { pname = "runtime.unix.System.Private.Uri"; version = "4.3.0"; sha256 = "1jx02q6kiwlvfksq1q9qr17fj78y5v6mwsszav4qcz9z25d5g6vk"; })
   (fetchNuGet { pname = "runtime.unix.System.Runtime.Extensions"; version = "4.3.0"; sha256 = "0pnxxmm8whx38dp6yvwgmh22smknxmqs5n513fc7m4wxvs1bvi4p"; })
   (fetchNuGet { pname = "vss-api-netcore"; version = "0.5.238-private"; sha256 = "0b42bnzc9h75asxhsbih4zkyn18ki1z8r075vmrd9706lgklqxq9"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/vss-api-netcore/versions/0.5.238-private/content"; })
+  # Failing:
+  (fetchNuGet {
+    pname = "System.Management";
+    version = "4.7.0";
+    sha256 = "0aw61jl6l78liiq04afxplz0ad5qbyg6vmyjaqrlnrv7whb58n66";
+  })
+  #(fetchNuGet {
+    #pname = "Microsoft.Windows.Compatibility";
+    #version = "6.0.0";
+    #sha256 = "0rfx855r7j3wy58qsj5nqhg1nxf8g4c5017ip0yvgpc1a9ydd097";
+  #})
+  #(fetchNuGet {
+    #pname = "System.Management";
+    #version = "6.0.0";
+    #sha256 = "0ra1g75ykapg6i5y0za721kpjd6xcq6dalijkdm6fsxxmz8iz4dr";
+  #})
   # nuget-to-nix
   (fetchNuGet { pname = "Azure.Core"; version = "1.35.0"; sha256 = "066idkc6kmp3532r3bqc698ybshw59306vg7g51fy90921jqv8lh"; })
   (fetchNuGet { pname = "Azure.Core"; version = "1.36.0"; sha256 = "14lsc6zik7s5by3gp86pf77wh58fcqrjy2xhx5p03gmhdn6iz2cn"; })
@@ -211,7 +227,6 @@
   (fetchNuGet { pname = "System.Linq.Async"; version = "4.0.0"; sha256 = "1cp122jzm2ivimhcgnyh8y5c333zphpy2bndzl3h4zka4y4582w3"; })
   (fetchNuGet { pname = "System.Linq.Expressions"; version = "4.1.0"; sha256 = "1gpdxl6ip06cnab7n3zlcg6mqp7kknf73s8wjinzi4p0apw82fpg"; })
   (fetchNuGet { pname = "System.Linq.Expressions"; version = "4.3.0"; sha256 = "0ky2nrcvh70rqq88m9a5yqabsl4fyd17bpr63iy2mbivjs2nyypv"; })
-  (fetchNuGet { pname = "System.Management"; version = "4.7.0"; sha256 = "0aw61jl6l78liiq04afxplz0ad5qbyg6vmyjaqrlnrv7whb58n66"; })
   (fetchNuGet { pname = "System.Memory"; version = "4.5.4"; sha256 = "14gbbs22mcxwggn0fcfs1b062521azb9fbb7c113x0mq6dzq9h6y"; })
   (fetchNuGet { pname = "System.Memory"; version = "4.5.5"; sha256 = "08jsfwimcarfzrhlyvjjid61j02irx6xsklf32rv57x2aaikvx0h"; })
   (fetchNuGet { pname = "System.Memory.Data"; version = "1.0.2"; sha256 = "1p8qdg0gzxhjvabryc3xws2629pj8w5zz2iqh86kw8sh0rann9ay"; })
