@@ -129,12 +129,12 @@
         dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
         dotnetBuildFlags = [
-          "-t:Layout"
+          #"-t:Layout"
           "-p:PackageType=agent"
           #"-p:LayoutRoot=_layout/linux-x64"
           "-p:BUILDCONFIG=Release"
-          #"-p:PackageRuntime=linux-x64"
-          "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
+          "-p:PackageRuntime=linux-x64"
+          #"-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
           "-p:AgentVersion=${version}"
           #"-p:LayoutRoot=_layout/linux-x64"
           "-p:CodeAnalysis=true"
