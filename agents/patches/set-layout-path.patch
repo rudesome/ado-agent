@@ -1,0 +1,44 @@
+diff --git a/src/dev.sh b/src/dev.sh
+index ab5a3348..6d473d1b 100755
+--- a/src/dev.sh
++++ b/src/dev.sh
+@@ -1,4 +1,5 @@
+-#!/bin/bash
++#! /usr/bin/env nix-shell
++#! nix-shell -i bash -p bash
+ 
+ ###############################################################################
+ #
+@@ -92,6 +93,8 @@ function make_build (){
+ 
+     echo "MSBuild target = ${TARGET}"
+ 
++    echo "Build config = ${BUILD_CONFIG}"
++
+     if  [[ "$ADO_ENABLE_LOGISSUE" == "true" ]]; then
+ 
+         dotnet msbuild -t:"${TARGET}" -p:PackageRuntime="${RUNTIME_ID}" -p:PackageType="${PACKAGE_TYPE}" -p:BUILDCONFIG="${BUILD_CONFIG}" -p:AgentVersion="${AGENT_VERSION}" -p:LayoutRoot="${LAYOUT_DIR}" -p:CodeAnalysis="true" \
+@@ -352,7 +355,7 @@ fi
+ heading ".NET SDK to path"
+ 
+ echo "Adding .NET to PATH (${DOTNETSDK_INSTALLDIR})"
+-export PATH=${DOTNETSDK_INSTALLDIR}:$PATH
++#export PATH=${DOTNETSDK_INSTALLDIR}:$PATH
+ echo "Path = $PATH"
+ echo ".NET Version = $(dotnet --version)"
+ 
+diff --git a/src/dir.proj b/src/dir.proj
+index b6b7f2fa..eba36dee 100644
+--- a/src/dir.proj
++++ b/src/dir.proj
+@@ -73,8 +73,8 @@
+              Projects="@(ProjectFiles)"
+              SkipNonExistentProjects="false"
+              StopOnFirstFailure="true"
+-             Properties="Configuration=$(BUILDCONFIG);PackageRuntime=$(PackageRuntime);Version=$(AgentVersion);RuntimeIdentifier=$(PackageRuntime);PublishDir=$(LayoutRoot)/bin;TreatWarningsAsErrors=$(TreatWarningsAsErrors)" />
+-    <Exec Command="%22$(DesktopMSBuild)%22 Agent.Service/Windows/AgentService.csproj /p:Configuration=$(BUILDCONFIG) /p:OutputPath=%22$(LayoutRoot)/bin%22 /p:TreatWarningsAsErrors=$(TreatWarningsAsErrors)" ConsoleToMSBuild="true" Condition="'$(PackageRuntime)' == 'win-x64' Or '$(PackageRuntime)' == 'win-x86'" />
++             Properties="Configuration=$(BUILDCONFIG);PackageRuntime=$(PackageRuntime);Version=$(AgentVersion);RuntimeIdentifier=$(PackageRuntime);PublishDir=%22$(MSBuildProjectDirectory)/../_layout/bin%22;TreatWarningsAsErrors=$(TreatWarningsAsErrors)" />
++    <Exec Command="%22$(DesktopMSBuild)%22 Agent.Service/Windows/AgentService.csproj /p:Configuration=$(BUILDCONFIG) /p:OutputPath=%22$(MSBuildProjectDirectory)/../_layout/bin%22 /p:TreatWarningsAsErrors=$(TreatWarningsAsErrors)" ConsoleToMSBuild="true" Condition="'$(PackageRuntime)' == 'win-x64' Or '$(PackageRuntime)' == 'win-x86'" />
+   </Target>
+ 
+   <Target Name="TestL0" DependsOnTargets="GenerateConstant">

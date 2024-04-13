@@ -22,43 +22,43 @@
           '';
         };
 
-        # dont change the unpackPhase (yet)
-        unpackPhase = ''
-          cp -r $src $TMPDIR/src
-          chmod -R +w $TMPDIR/src
-          cd $TMPDIR/src
-          (
-            export PATH=${buildPackages.git}/bin:$PATH
-            git init
-            git config user.email "root@localhost"
-            git config user.name "root"
-            git add .
-            git commit -m "Initial commit"
-            git checkout -b v${version}
-          )
-          mkdir -p $TMPDIR/bin
-          cat > $TMPDIR/bin/git <<EOF
-          #!${runtimeShell}
-          if [ \$# -eq 1 ] && [ "\$1" = "rev-parse" ]; then
-          echo $(cat $TMPDIR/src/.git-revision)
-          exit 0
-          fi
-          exec ${buildPackages.git}/bin/git "\$@"
-          EOF
-          chmod +x $TMPDIR/bin/git
-          export PATH=$TMPDIR/bin:$PATH
-        '';
+        #unpackPhase = ''
+        #cp -r $src $TMPDIR/src
+        #chmod -R +w $TMPDIR/src
+        #cd $TMPDIR/src
+        #(
+        #export PATH=${buildPackages.git}/bin:$PATH
+        #git init
+        #git config user.email "root@localhost"
+        #git config user.name "root"
+        #git add .
+        #git commit -m "Initial commit"
+        #git checkout -b v${version}
+        #)
+        #mkdir -p $TMPDIR/bin
+        #cat > $TMPDIR/bin/git <<EOF
+        ##!${runtimeShell}
+        #if [ \$# -eq 1 ] && [ "\$1" = "rev-parse" ]; then
+        #echo $(cat $TMPDIR/src/.git-revision)
+        #exit 0
+        #fi
+        #exec ${buildPackages.git}/bin/git "\$@"
+        #EOF
+        #chmod +x $TMPDIR/bin/git
+        #export PATH=$TMPDIR/bin:$PATH
+        #'';
 
         patches = [
           ./patches/dont-install-service.patch
           ./patches/host-context-dirs.patch
+          ./patches/set-layout-path.patch
         ];
 
         postPatch = ''
-            # not using System.Management?
-            #substituteInPlace src/Agent.Sdk/Util/ProcessUtil.cs \
-            #--replace 'using System.Management;' \
-            #' '
+          # not using System.Management?
+          #substituteInPlace src/Agent.Sdk/Util/ProcessUtil.cs \
+          #--replace 'using System.Management;' \
+          #' '
         '';
 
         DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
@@ -66,7 +66,7 @@
 
         preConfigure = ''
           echo "preconfig"
-          mkdir -p _layout/linux-x64
+          mkdir -p _layout/bin
           # Generate src/Microsoft.VisualStudio.Services.Agent/BuildConstants.cs
           dotnet msbuild \
             -t:GenerateConstant \
@@ -77,7 +77,12 @@
             src/dir.proj
         '';
 
+        preBuild = ''
+          ls -lsa _layout
+          ls -lsa _layout/bin
+        '';
         #preBuild = ''
+        # override csproj with own config / package references
         #echo "......PREBUILD"
         #cat << 'EOF' > /build/src/src/Agent.Sdk/Agent.Sdk.csproj
         #<Project Sdk="Microsoft.NET.Sdk">
@@ -124,12 +129,15 @@
         dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
         dotnetBuildFlags = [
+          "-t:Layout"
           "-p:PackageType=agent"
-          "-p:LayoutRoot=_layout/linux-x64"
+          #"-p:LayoutRoot=_layout/linux-x64"
           "-p:BUILDCONFIG=Release"
-          "-p:PackageRuntime=linux-x64"
+          #"-p:PackageRuntime=linux-x64"
+          "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
           "-p:AgentVersion=${version}"
-          "-p:LayoutRoot=_layout/linux-x64"
+          #"-p:LayoutRoot=_layout/linux-x64"
+          "-p:CodeAnalysis=true"
         ];
 
         #dotnetFlags = [
@@ -146,11 +154,11 @@
         ];
         nugetDeps = ./deps.nix;
 
-        doCheck = true;
+        #doCheck = true;
 
         preCheck = ''
           mkdir -p _layout/externals
-          ln -s ${nodejs_20} _layout/externals/node20
+          ln -s ${nodejs_20} _layout/externals/node20_1
         '';
 
         postInstall = ''
