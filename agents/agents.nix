@@ -52,7 +52,11 @@
           ./patches/dont-install-service.patch
           ./patches/host-context-dirs.patch
           ./patches/set-layout-path.patch
+          ./patches/remove-windows-check.patch
+          ./patches/remove-processUtil.patch
+          ./patches/remove-buildXL.patch
         ];
+
 
         postPatch = ''
           # not using System.Management?
