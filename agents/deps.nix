@@ -1,4 +1,5 @@
 { fetchNuGet }: [
+  #(fetchNuGet { pname = "System.Management"; version = "4.7.0"; sha256 = "0aw61jl6l78liiq04afxplz0ad5qbyg6vmyjaqrlnrv7whb58n66"; })
   # added manually
   (fetchNuGet { pname = "Microsoft.BuildXL.Cache.Hashing"; version = "0.1.0-20230922.1"; sha256 = "03mmkyhdwxcfsjpz7dfpkl2y60lw6g79pxsr4ibsiy5fddp18s5y"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/Microsoft.BuildXL.Cache.Hashing/versions/0.1.0-20230922.1/content"; })
   (fetchNuGet { pname = "Microsoft.Windows.Debuggers.SymstoreInterop"; version = "1.0.1-netstandard2.0"; sha256 = "1paqlp2552vjkws85gksn68qihciy7hg60l3v060c7v8an12vy2n"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/Microsoft.Windows.Debuggers.SymstoreInterop/versions/1.0.1-netstandard2.0/content"; })
@@ -26,22 +27,6 @@
   (fetchNuGet { pname = "runtime.unix.System.Private.Uri"; version = "4.3.0"; sha256 = "1jx02q6kiwlvfksq1q9qr17fj78y5v6mwsszav4qcz9z25d5g6vk"; })
   (fetchNuGet { pname = "runtime.unix.System.Runtime.Extensions"; version = "4.3.0"; sha256 = "0pnxxmm8whx38dp6yvwgmh22smknxmqs5n513fc7m4wxvs1bvi4p"; })
   (fetchNuGet { pname = "vss-api-netcore"; version = "0.5.238-private"; sha256 = "0b42bnzc9h75asxhsbih4zkyn18ki1z8r075vmrd9706lgklqxq9"; url = "https://pkgs.dev.azure.com/mseng/PipelineTools/_apis/packaging/feeds/61a4ae2c-15fb-4085-b7f6-0044b9eb7b85/nuget/packages/vss-api-netcore/versions/0.5.238-private/content"; })
-  # Failing:
-  (fetchNuGet {
-    pname = "System.Management";
-    version = "4.7.0";
-    sha256 = "0aw61jl6l78liiq04afxplz0ad5qbyg6vmyjaqrlnrv7whb58n66";
-  })
-  #(fetchNuGet {
-    #pname = "Microsoft.Windows.Compatibility";
-    #version = "6.0.0";
-    #sha256 = "0rfx855r7j3wy58qsj5nqhg1nxf8g4c5017ip0yvgpc1a9ydd097";
-  #})
-  #(fetchNuGet {
-    #pname = "System.Management";
-    #version = "6.0.0";
-    #sha256 = "0ra1g75ykapg6i5y0za721kpjd6xcq6dalijkdm6fsxxmz8iz4dr";
-  #})
   # nuget-to-nix
   (fetchNuGet { pname = "Azure.Core"; version = "1.35.0"; sha256 = "066idkc6kmp3532r3bqc698ybshw59306vg7g51fy90921jqv8lh"; })
   (fetchNuGet { pname = "Azure.Core"; version = "1.36.0"; sha256 = "14lsc6zik7s5by3gp86pf77wh58fcqrjy2xhx5p03gmhdn6iz2cn"; })
