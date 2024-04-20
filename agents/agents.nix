@@ -51,10 +51,10 @@
         patches = [
           ./patches/dont-install-service.patch
           ./patches/host-context-dirs.patch
-          ./patches/set-layout-path.patch
-          ./patches/remove-windows-check.patch
-          ./patches/remove-processUtil.patch
           ./patches/remove-buildXL.patch
+          ./patches/remove-processUtil.patch
+          ./patches/remove-windows-check.patch
+          ./patches/set-layout-path.patch
         ];
 
 
