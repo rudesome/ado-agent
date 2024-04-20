@@ -22,31 +22,31 @@
           '';
         };
 
-        #unpackPhase = ''
-        #cp -r $src $TMPDIR/src
-        #chmod -R +w $TMPDIR/src
-        #cd $TMPDIR/src
-        #(
-        #export PATH=${buildPackages.git}/bin:$PATH
-        #git init
-        #git config user.email "root@localhost"
-        #git config user.name "root"
-        #git add .
-        #git commit -m "Initial commit"
-        #git checkout -b v${version}
-        #)
-        #mkdir -p $TMPDIR/bin
-        #cat > $TMPDIR/bin/git <<EOF
-        ##!${runtimeShell}
-        #if [ \$# -eq 1 ] && [ "\$1" = "rev-parse" ]; then
-        #echo $(cat $TMPDIR/src/.git-revision)
-        #exit 0
-        #fi
-        #exec ${buildPackages.git}/bin/git "\$@"
-        #EOF
-        #chmod +x $TMPDIR/bin/git
-        #export PATH=$TMPDIR/bin:$PATH
-        #'';
+        unpackPhase = ''
+          cp -r $src $TMPDIR/src
+          chmod -R +w $TMPDIR/src
+          cd $TMPDIR/src
+          (
+          export PATH=${buildPackages.git}/bin:$PATH
+          git init
+          git config user.email "root@localhost"
+          git config user.name "root"
+          git add .
+          git commit -m "Initial commit"
+          git checkout -b v${version}
+          )
+          mkdir -p $TMPDIR/bin
+          cat > $TMPDIR/bin/git <<EOF
+          #!${runtimeShell}
+          if [ \$# -eq 1 ] && [ "\$1" = "rev-parse" ]; then
+          echo $(cat $TMPDIR/src/.git-revision)
+          exit 0
+          fi
+          exec ${buildPackages.git}/bin/git "\$@"
+          EOF
+          chmod +x $TMPDIR/bin/git
+          export PATH=$TMPDIR/bin:$PATH
+        '';
 
         patches = [
           ./patches/dont-install-service.patch
@@ -57,13 +57,6 @@
           ./patches/remove-buildXL.patch
         ];
 
-
-        postPatch = ''
-          # not using System.Management?
-          #substituteInPlace src/Agent.Sdk/Util/ProcessUtil.cs \
-          #--replace 'using System.Management;' \
-          #' '
-        '';
 
         DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
         LOCALE_ARCHIVE = lib.optionalString (!DOTNET_SYSTEM_GLOBALIZATION_INVARIANT) "${glibcLocales}/lib/locale/locale-archive";
@@ -80,38 +73,6 @@
             -p:AgentVersion="${version}" \
             src/dir.proj
         '';
-
-        preBuild = ''
-          ls -lsa _layout
-          ls -lsa _layout/bin
-        '';
-        #preBuild = ''
-        # override csproj with own config / package references
-        #echo "......PREBUILD"
-        #cat << 'EOF' > /build/src/src/Agent.Sdk/Agent.Sdk.csproj
-        #<Project Sdk="Microsoft.NET.Sdk">
-        #<Import Project="..\Common.props" />
-
-        #<PropertyGroup>
-        #<OutputType>Library</OutputType>
-        #<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-        #</PropertyGroup>
-
-        #<ItemGroup>
-        #<PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
-        #<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8" Condition="$(CodeAnalysis)=='true'" />
-        #<PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-        #<PackageReference Include="System.IO.FileSystem.AccessControl" Version="6.0.0-preview.5.21301.5" />
-        #<PackageReference Include="System.Management" Version="4.7.0" />
-        #<PackageReference Include="System.ServiceProcess.ServiceController" Version="6.0.1" />
-        #<PackageReference Include="System.Security.Principal.Windows" Version="6.0.0-preview.5.21301.5" />
-        #<PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
-        #<PackageReference Include="vss-api-netcore" Version="$(VssApiVersion)" />
-        #</ItemGroup>
-        #</Project>
-        #EOF
-        ##cat /build/src/src/Agent.Sdk/Agent.Sdk.csproj
-        #'';
 
         nativeBuildInputs = [
           autoPatchelfHook
@@ -132,21 +93,9 @@
         dotnet-sdk = dotnetCorePackages.sdk_6_0;
         dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
-        dotnetBuildFlags = [
-          #"-t:Layout"
-          "-p:PackageType=agent"
-          #"-p:LayoutRoot=_layout/linux-x64"
-          "-p:BUILDCONFIG=Release"
-          "-p:PackageRuntime=linux-x64"
-          #"-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
-          "-p:AgentVersion=${version}"
-          #"-p:LayoutRoot=_layout/linux-x64"
-          "-p:CodeAnalysis=true"
+        dotnetFlags = [
+          "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
         ];
-
-        #dotnetFlags = [
-        #"-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
-        #];
 
         projectFile = [
           "src/Agent.Sdk/Agent.Sdk.csproj"
@@ -167,13 +116,27 @@
 
         postInstall = ''
           echo ".....postInstall"
+          mkdir -p $out/bin
+          ls -lsa
+          ls -lsa src/Misc/layoutroot
+
+          install -m755 src/Misc/layoutbin/runsvc.sh                $out/lib/${pname}
+          install -m755 src/Misc/layoutbin/AgentService.js          $out/lib/${pname}
+          install -m755 src/Misc/layoutroot/run.sh                  $out/lib/${pname}
+          #install -m755 src/Misc/layoutroot/run-helper.sh.template  $out/lib/agent/run-helper.sh
+          install -m755 src/Misc/layoutroot/config.sh               $out/lib/${pname}
+          install -m755 src/Misc/layoutroot/env.sh                  $out/lib/${pname}
+
         '';
 
-        #executables = [
-        #"Agent.Listener"
-        #"Agent.Worker"
-        #"Agent.PluginHost"
-        #];
+        executables = [
+          "config.sh"
+          "Agent.Listener"
+          "Agent.Worker"
+          "Agent.PluginHost"
+          "env.sh"
+          "run.sh"
+        ];
 
       };
 
