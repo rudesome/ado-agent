@@ -123,10 +123,25 @@
           install -m755 src/Misc/layoutbin/runsvc.sh                $out/lib/${pname}
           install -m755 src/Misc/layoutbin/AgentService.js          $out/lib/${pname}
           install -m755 src/Misc/layoutroot/run.sh                  $out/lib/${pname}
-          #install -m755 src/Misc/layoutroot/run-helper.sh.template  $out/lib/agent/run-helper.sh
           install -m755 src/Misc/layoutroot/config.sh               $out/lib/${pname}
           install -m755 src/Misc/layoutroot/env.sh                  $out/lib/${pname}
 
+          substituteInPlace $out/lib/${pname}/config.sh \
+              --replace './bin/Agent.Listener' "$out/bin/Agent.Listener"
+
+          substituteInPlace $out/lib/${pname}/config.sh \
+            --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
+            --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
+            --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
+
+          # Make paths absolute
+          substituteInPlace $out/lib/${pname}/runsvc.sh \
+            --replace './externals' "$out/lib/externals" \
+            --replace './bin/AgentService.js' "$out/lib/${pname}/RunnerService.js"
+
+          # We don't wrap with libicu
+          substituteInPlace $out/lib/${pname}/config.sh \
+            --replace '$LDCONFIG -NXv "''${libpath//:/}"' 'echo libicu'
         '';
 
         executables = [
