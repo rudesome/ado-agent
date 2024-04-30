@@ -55,6 +55,7 @@
           ./patches/remove-processUtil.patch
           ./patches/remove-windows-check.patch
           ./patches/set-layout-path.patch
+          ./patches/host-context-dirs.patch
         ];
 
 

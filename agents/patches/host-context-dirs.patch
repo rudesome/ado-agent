@@ -1,5 +1,5 @@
 diff --git a/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs b/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
-index 2cb0cacd..82a2b556 100644
+index 2cb0cacd..f28ff4a9 100644
 --- a/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
 +++ b/src/Microsoft.VisualStudio.Services.Agent/HostContext.cs
 @@ -186,7 +186,7 @@ namespace Microsoft.VisualStudio.Services.Agent
@@ -17,7 +17,7 @@ index 2cb0cacd..82a2b556 100644
                  case WellKnownDirectory.Root:
 -                    path = new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
 +                    path = Environment.GetEnvironmentVariable("RUNNER_ROOT")
-+                            ?? new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
++                                ?? new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
                      break;
  
                  case WellKnownDirectory.ServerOM:
