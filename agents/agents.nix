@@ -50,12 +50,12 @@
 
         patches = [
           ./patches/dont-install-service.patch
-          ./patches/host-context-dirs.patch
           ./patches/remove-buildXL.patch
           ./patches/remove-processUtil.patch
           ./patches/remove-windows-check.patch
           ./patches/set-layout-path.patch
           ./patches/host-context-dirs.patch
+          ./patches/use-get-directory-for-diag.patch
         ];
 
 
